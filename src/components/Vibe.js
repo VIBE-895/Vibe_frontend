@@ -21,7 +21,7 @@ const VibeApp = () => {
       formData.append("file", file);
       
       setStatus("Processing audio...");
-      const response = await axios.post("http://127.0.0.1:5656/summarize", formData);
+      const response = await axios.post("http://127.0.0.1:5656/summarize/v1", formData);
       setResult(response.data.data);
       setTotalTime(response.data.metaData.totalTime);
     } catch (error) {
@@ -80,7 +80,7 @@ const VibeApp = () => {
             <div className="summary-container">
               <h2>Summary</h2>
               <p><strong>Topic:</strong> {result.topic}</p>
-              <p><strong>Context:</strong> {result.context}</p>
+              <p><strong>Context:</strong> {result.setting}</p>
               <p><strong>Key Terms:</strong> {result.key_terms.join(", ")}</p>
               <p><strong>Summary:</strong> {result.summary}</p>
             </div>
