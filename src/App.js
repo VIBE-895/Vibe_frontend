@@ -1,13 +1,17 @@
-import logo from './logo.svg';
-import Vibe from "./components/Vibe";
+import Vibe from "./components/Prototype";
+import Home from "./components/Home";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 
 
 function App() {
   return (
-    <div className="App">
-      <Vibe />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/prototype" element={<Vibe />} />
+      </Routes>
+    </Router>
   );
 }
 

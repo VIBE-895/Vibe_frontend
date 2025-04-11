@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaMicrophone, FaUpload } from "react-icons/fa";
 import { motion } from "framer-motion";
 import axios from "axios";
-import "../styles/Vibe.css";
+import "../styles/Prototype.css";
 
 const VibeApp = () => {
   const [processing, setProcessing] = useState(false);
@@ -13,15 +13,18 @@ const VibeApp = () => {
   const handleAudioProcessing = async (file) => {
     setProcessing(true);
     setStatus("Uploading audio...");
-    setResult(null); // 清空之前的结果
+    setResult(null);
     setTotalTime(null);
-    
+
     try {
       const formData = new FormData();
       formData.append("file", file);
-      
+
       setStatus("Processing audio...");
-      const response = await axios.post("http://127.0.0.1:5656/summarize/v1", formData);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/summarize/v1`,
+        formData
+      );
       setResult(response.data.data);
       setTotalTime(response.data.metaData.totalTime);
     } catch (error) {
@@ -42,13 +45,21 @@ const VibeApp = () => {
       <nav className="navbar">
         <h1 className="logo">VIBE</h1>
       </nav>
-      
+
       <div className="content">
-        <h2 className="title artistic-title">VIBE – Voice Interpretation and Brief Extraction</h2>
+        <h2 className="title artistic-title">
+          VIBE – Voice Interpretation and Brief Extraction
+        </h2>
         <div className="button-container">
           {!processing ? (
             <>
-              <input type="file" accept="audio/*" onChange={handleFileUpload} hidden id="upload-input" />
+              <input
+                type="file"
+                accept="audio/*"
+                onChange={handleFileUpload}
+                hidden
+                id="upload-input"
+              />
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
@@ -72,17 +83,27 @@ const VibeApp = () => {
             </div>
           )}
         </div>
-        
+
         {result && (
           <div className="result">
             <h2>Processing Time</h2>
-            <p className="total-time">Total Time: {totalTime?.toFixed(2)} seconds</p>
+            <p className="total-time">
+              Total Time: {totalTime?.toFixed(2)} seconds
+            </p>
             <div className="summary-container">
               <h2>Summary</h2>
-              <p><strong>Topic:</strong> {result.topic}</p>
-              <p><strong>Context:</strong> {result.setting}</p>
-              <p><strong>Key Terms:</strong> {result.key_terms.join(", ")}</p>
-              <p><strong>Summary:</strong> {result.summary}</p>
+              <p>
+                <strong>Topic:</strong> {result.topic}
+              </p>
+              <p>
+                <strong>Context:</strong> {result.setting}
+              </p>
+              <p>
+                <strong>Key Terms:</strong> {result.key_terms.join(", ")}
+              </p>
+              <p>
+                <strong>Summary:</strong> {result.summary}
+              </p>
             </div>
           </div>
         )}
